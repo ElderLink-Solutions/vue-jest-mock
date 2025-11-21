@@ -1,0 +1,32 @@
+{
+  "name": "vue-jest-mock",
+  "version": "1.0.0",
+  "description": "A sample project demonstrating using mocks with Jest to simulate a login process with different conditions such as being locked out",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "vue",
+    "jest",
+    "mock",
+    "testing",
+    "login"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@vue/test-utils": "^2.4.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "vue": "^3.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
