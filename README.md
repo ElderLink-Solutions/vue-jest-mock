@@ -2,6 +2,10 @@
 
 A sample project demonstrating how to use mocks with Jest to simulate a login process with different conditions such as being locked out. This project is similar in concept to vue-selenide and vue-playwright, but focuses on unit testing with Jest mocks instead of end-to-end testing.
 
+## 🎯 Live Demo
+
+Open `demo.html` in your browser to see a visual overview of all test scenarios and project features.
+
 ## Overview
 
 This project showcases best practices for testing Vue.js applications using Jest with mocked API responses. It demonstrates how to test various authentication scenarios without requiring a real backend server.
