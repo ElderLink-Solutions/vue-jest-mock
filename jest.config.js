@@ -2,14 +2,15 @@ module.exports = {
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.js$': 'babel-jest',
+    '^.+\\.ts$': 'ts-jest',
   },
-  moduleFileExtensions: ['js', 'json', 'vue'],
+  moduleFileExtensions: ['js', 'ts', 'json', 'vue'],
   collectCoverageFrom: [
-    'src/**/*.{js,vue}',
+    'src/**/*.{js,ts,vue}',
     '!src/main.js',
     '!**/node_modules/**'
   ],
   testMatch: [
-    '**/tests/**/*.spec.js'
+    '**/__tests__/**/*.spec.ts'
   ]
 };

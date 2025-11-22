@@ -1,8 +1,9 @@
-import loginService from '../src/services/loginService';
+import loginService from '../loginService';
 import axios from 'axios';
 
 // Mock axios
 jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('LoginService', () => {
   beforeEach(() => {
@@ -24,7 +25,7 @@ describe('LoginService', () => {
         }
       };
       
-      axios.post.mockResolvedValue(mockResponse);
+      mockedAxios.post.mockResolvedValue(mockResponse);
 
       const result = await loginService.login('testuser', 'password123');
 
@@ -36,7 +37,9 @@ describe('LoginService', () => {
         }
       );
       expect(result.success).toBe(true);
-      expect(result.data).toEqual(mockResponse.data);
+      if (result.success) {
+        expect(result.data).toEqual(mockResponse.data);
+      }
     });
 
     it('should handle invalid credentials (401 error)', async () => {
@@ -50,13 +53,15 @@ describe('LoginService', () => {
         }
       };
       
-      axios.post.mockRejectedValue(mockError);
+      mockedAxios.post.mockRejectedValue(mockError);
 
       const result = await loginService.login('wronguser', 'wrongpass');
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('invalid_credentials');
-      expect(result.message).toBe('Invalid username or password.');
+      if (!result.success) {
+        expect(result.error).toBe('invalid_credentials');
+        expect(result.message).toBe('Invalid username or password.');
+      }
     });
 
     it('should handle locked out account (423 error)', async () => {
@@ -70,13 +75,15 @@ describe('LoginService', () => {
         }
       };
       
-      axios.post.mockRejectedValue(mockError);
+      mockedAxios.post.mockRejectedValue(mockError);
 
       const result = await loginService.login('lockeduser', 'password123');
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('locked_out');
-      expect(result.message).toContain('locked');
+      if (!result.success) {
+        expect(result.error).toBe('locked_out');
+        expect(result.message).toContain('locked');
+      }
     });
 
     it('should handle server error (500 error)', async () => {
@@ -90,13 +97,15 @@ describe('LoginService', () => {
         }
       };
       
-      axios.post.mockRejectedValue(mockError);
+      mockedAxios.post.mockRejectedValue(mockError);
 
       const result = await loginService.login('testuser', 'password123');
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('server_error');
-      expect(result.message).toBe('Internal server error.');
+      if (!result.success) {
+        expect(result.error).toBe('server_error');
+        expect(result.message).toBe('Internal server error.');
+      }
     });
 
     it('should handle network error', async () => {
@@ -106,13 +115,15 @@ describe('LoginService', () => {
         code: 'ERR_NETWORK'
       };
       
-      axios.post.mockRejectedValue(mockError);
+      mockedAxios.post.mockRejectedValue(mockError);
 
       const result = await loginService.login('testuser', 'password123');
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('network_error');
-      expect(result.message).toContain('Network error');
+      if (!result.success) {
+        expect(result.error).toBe('network_error');
+        expect(result.message).toContain('Network error');
+      }
     });
 
     it('should use default error message when response data message is missing', async () => {
@@ -124,12 +135,14 @@ describe('LoginService', () => {
         }
       };
       
-      axios.post.mockRejectedValue(mockError);
+      mockedAxios.post.mockRejectedValue(mockError);
 
       const result = await loginService.login('testuser', 'password123');
 
       expect(result.success).toBe(false);
-      expect(result.message).toBe('Invalid username or password.');
+      if (!result.success) {
+        expect(result.message).toBe('Invalid username or password.');
+      }
     });
   });
 
@@ -143,7 +156,7 @@ describe('LoginService', () => {
         }
       };
       
-      axios.get.mockResolvedValue(mockResponse);
+      mockedAxios.get.mockResolvedValue(mockResponse);
 
       const result = await loginService.checkAccountStatus('testuser');
 
@@ -162,7 +175,7 @@ describe('LoginService', () => {
         }
       };
       
-      axios.get.mockResolvedValue(mockResponse);
+      mockedAxios.get.mockResolvedValue(mockResponse);
 
       const result = await loginService.checkAccountStatus('lockeduser');
 
@@ -172,7 +185,7 @@ describe('LoginService', () => {
 
     it('should handle error when checking account status', async () => {
       // Mock error response
-      axios.get.mockRejectedValue(new Error('Network error'));
+      mockedAxios.get.mockRejectedValue(new Error('Network error'));
 
       const result = await loginService.checkAccountStatus('testuser');
 
